@@ -3,15 +3,24 @@ import { Enter } from "./Components/Enter/Enter.js";
 import "./App.css";
 
 class App extends Component {
+    socket = "";
+
     constructor(props) {
         super(props);
         this.state = { logged: false };
-
         this.enter = this.enter.bind(this);
     }
 
-    enter() {
+    enter(nickname) {
         this.setState({ logged: true });
+        this.socket = new WebSocket("ws://localhost:5001");
+        let obj = {
+            messageObjective: "sendNickname",
+            data: {
+                nickname: nickname
+            }
+        }
+        this.socket.onopen = () => this.socket.send(JSON.stringify(obj))
     }
 
     render() {
